@@ -1,0 +1,20 @@
+﻿What i need:
+Controllers:
+1. USER add, delete, mofify, confirm password, exist - i will use in first view "loginPanel"
+	-easy authorisation(password in json:( ), i will make Oath2 but in new year
+
+2. WORD add, delete, modify, getAll(for some person) getPart-wtf? (i don't know yet) but it is shity to sent each time all data
+
+
+3. STAT add, modify, getAll, getPart (some period or stats for some words) !!! First i must develop what kinede of stats i want
+
+
+4. DECK add, modify, get, getAll,
+
+5. GAMEMODULE	getQuestion (1 pl Word, 3 random en word, all stats for this word and user)
+				
+
+Database
+mobile user can't use app without internte connection -future: sqlite or noSql on android
+
+

@@ -1,0 +1,11 @@
+﻿Deck -< Word 
+to one Deck you have many words 
+one word is in just one Desk (you can't view the words so many - many does't have sence)
+
+Word -- Stat
+wor
+
+User -< Deck  
+One user must to have more than one deck
+
+

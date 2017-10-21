@@ -25,10 +25,6 @@ namespace DBL
         public IDbSet<Deck> Decks { get; set; }
         public IDbSet<Stat> Stats { get; set; }
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-        }
 
         public IDbSet<T> GetDbSet<T>() where T : class
         {

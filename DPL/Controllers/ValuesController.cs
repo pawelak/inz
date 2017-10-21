@@ -4,15 +4,21 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using BLL.Services;
 
 namespace DPL.Controllers
 {
     public class ValuesController : ApiController
     {
+        UserService userService = new UserService();
+
         // GET api/values
-        public IEnumerable<string> Get()
+        public string Get()
         {
-            return new string[] { "value1", "value2" };
+            if (userService.UserExist("kolakp@o2.pl"))
+                return "true";
+
+            return "false";
         }
 
         // GET api/values/5
@@ -35,5 +41,6 @@ namespace DPL.Controllers
         public void Delete(int id)
         {
         }
+
     }
 }

@@ -1,21 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace DBL.Models
+namespace BLL.ModelsDTO
 {
-    public class Deck
+    public class DeckDto
     {
-        [Key]
         public int Id { get; set; }
         public string Name { get; set; }
         public string Decdescription { get; set; }
         public int NumberOfWords { get; set; }
-
-        public Word Word { get; set; }
-        public User User { get; set; }
-
     }
 }

@@ -17,5 +17,6 @@ namespace DBL.Models
         public double KnowLevel { get; set; }
 
         public Word Word { get; set; }
+        public User User { get; set; }
     }
 }

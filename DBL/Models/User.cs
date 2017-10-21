@@ -14,7 +14,9 @@ namespace DBL.Models
         public string Firstname { get; set; }
         public string Name { get; set; }
 
+
         public virtual ICollection<Deck> Decks { get; set; }
+        public virtual ICollection<Stat> Stats { get; set; }
 
     }
 }
