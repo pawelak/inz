@@ -15,10 +15,9 @@ namespace DPL.Controllers
         // GET api/values
         public string Get()
         {
-            if (userService.UserExist("kolakp@o2.pl"))
-                return "true";
+            userService.UserExist("asd");
 
-            return "false";
+            return "poszlo";
         }
 
         // GET api/values/5

@@ -18,14 +18,14 @@ namespace DBL.Repositories
             this.db = new DataContext();
         }
 
-        public Dictionary<Type, object> Repo = new Dictionary<Type, object>();
+        public Dictionary<Type, object> Repos = new Dictionary<Type, object>();
 
         public IRepository<T> Repository<T>() where T : class
         {
-            if (Repo.Keys.Contains(typeof(T)))
-                return Repo[typeof(T)] as IRepository<T>;
+            if (Repos.Keys.Contains(typeof(T)))
+                return Repos[typeof(T)] as IRepository<T>;
             IRepository<T> repo = new GenericRepository<T>(db);
-            Repo.Add(typeof(T), repo);
+            Repos.Add(typeof(T), repo);
             return repo;
         }
 

@@ -9,14 +9,14 @@ namespace DBL.Models
 {
     public class User
     {
-        [Key]
-        public int Id { get; set; }
-        public string Firstname { get; set; }
-        public string Name { get; set; }
+            [Key]
+            public int Id { get; set; }
+            public string Firstname { get; set; }
+            public string Name { get; set; }
 
 
-        public virtual ICollection<Deck> Decks { get; set; }
-        public virtual ICollection<Stat> Stats { get; set; }
+            public virtual ICollection<Deck> Decks { get; set; }
+            public virtual ICollection<Stat> Stats { get; set; }
 
     }
 }

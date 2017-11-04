@@ -17,6 +17,7 @@ namespace DBL.Models
         public LanguageEnum Language2 { get; set; }
 
         public Deck Deck { get; set; }
+        [Required]
         public Stat Stat { get; set; }
 
 

@@ -19,7 +19,7 @@ namespace BLL.Services
 
         public bool UserExist(string email)
         {
-            uow.Repository<User>().GetByPhrase(email);
+            uow.Repository<User>().Insert(new User(){Name = "pawelak", Firstname = "Pawel"});
 
             return false;
         }

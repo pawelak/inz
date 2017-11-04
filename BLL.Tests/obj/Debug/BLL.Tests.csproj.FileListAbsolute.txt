@@ -8,6 +8,11 @@ C:\Users\pawel\Source\Repos\inz\BLL.Tests\bin\Debug\pl\Microsoft.VisualStudio.Qu
 C:\Users\pawel\Source\Repos\inz\BLL.Tests\obj\Debug\BLL.Tests.csprojResolveAssemblyReference.cache
 C:\Users\pawel\Source\Repos\inz\BLL.Tests\obj\Debug\BLL.Tests.dll
 C:\Users\pawel\Source\Repos\inz\BLL.Tests\obj\Debug\BLL.Tests.pdb
+C:\Users\pawel\Source\Repos\inz\BLL.Tests\bin\Debug\DBL.dll
+C:\Users\pawel\Source\Repos\inz\BLL.Tests\bin\Debug\EntityFramework.dll
+C:\Users\pawel\Source\Repos\inz\BLL.Tests\bin\Debug\DBL.pdb
+C:\Users\pawel\Source\Repos\inz\BLL.Tests\bin\Debug\DBL.dll.config
+C:\Users\pawel\Source\Repos\inz\BLL.Tests\bin\Debug\EntityFramework.xml
 C:\Users\pawel\Source\Repos\inz\BLL.Tests\bin\Debug\roslyn\csc.exe
 C:\Users\pawel\Source\Repos\inz\BLL.Tests\bin\Debug\roslyn\csc.exe.config
 C:\Users\pawel\Source\Repos\inz\BLL.Tests\bin\Debug\roslyn\csc.rsp

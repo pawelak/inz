@@ -10,21 +10,22 @@ namespace DBL
 {
     public class DataContext : DbContext, IDataContext
     {
-        public DataContext() : base("name=InzDb")
+//        public IDbSet<User> Users { get; set; }
+//        public IDbSet<Word> Words { get; set; }
+//        public IDbSet<Deck> Decks { get; set; }
+//        public IDbSet<Stat> Stats { get; set; }
+
+        public DataContext() : base("name=FiszkiDb")
         {
 
         }
-
-        public new IDbSet<T> Set<T>() where T : class
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            return base.Set<T>();
+            modelBuilder.Entity<User>().ToTable("User");
+            modelBuilder.Entity<Deck>().ToTable("Deck");
+            modelBuilder.Entity<Stat>().ToTable("Stat");
+            modelBuilder.Entity<Word>().ToTable("Word");
         }
-
-        public IDbSet<User> Users { get; set; }
-        public IDbSet<Word> Words { get; set; }
-        public IDbSet<Deck> Decks { get; set; }
-        public IDbSet<Stat> Stats { get; set; }
-
 
         public IDbSet<T> GetDbSet<T>() where T : class
         {

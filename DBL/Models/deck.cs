@@ -14,7 +14,7 @@ namespace DBL.Models
         public string Decdescription { get; set; }
         public int NumberOfWords { get; set; }
 
-        public Word Word { get; set; }
+        public virtual ICollection<Word> Words { get; set; }
         public User User { get; set; }
 
     }
