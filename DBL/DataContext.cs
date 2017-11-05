@@ -17,7 +17,7 @@ namespace DBL
 
         public DataContext() : base("name=FiszkiDb")
         {
-
+            
         }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

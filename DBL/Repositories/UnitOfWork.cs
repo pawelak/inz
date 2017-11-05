@@ -11,7 +11,7 @@ namespace DBL.Repositories
     
     public class UnitOfWork : IDisposable
     {
-        private DataContext db;
+        private DataContext db { get; }
 
         public UnitOfWork()
         {
@@ -28,6 +28,7 @@ namespace DBL.Repositories
             Repos.Add(typeof(T), repo);
             return repo;
         }
+
 
         //do anlizy 
         private bool disposed = false;

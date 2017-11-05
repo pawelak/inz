@@ -4,10 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Data.SqlTypes;
 using System.Linq;
 using System.Web;
+using DBL.Interfaces;
 
 namespace DBL.Models
 {
-    public class User
+    public class User : IEntity
     {
             [Key]
             public int Id { get; set; }

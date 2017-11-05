@@ -4,10 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using DBL.Enum;
+using DBL.Interfaces;
 
 namespace DBL.Models
 {
-    public class Word
+    public class Word : IEntity
     {
         [Key]
         public int Id { get; set; }

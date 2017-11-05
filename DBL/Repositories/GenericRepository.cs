@@ -2,46 +2,62 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Core.Objects.DataClasses;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace DBL.Interfaces
 {
     public class GenericRepository<T> : IRepository<T> where T : class
     {
-        private readonly IDataContext dbContext;
-        IDbSet<T> objectSet;
+        private readonly IDataContext _dbContext;
+        readonly IDbSet<T> _objectSet;
 
         public GenericRepository(IDataContext dataContext)
         {
-            this.dbContext = dataContext;
-            this.objectSet = dbContext.GetDbSet<T>();
+            this._dbContext = dataContext;
+            this._objectSet = _dbContext.GetDbSet<T>();
         }
 
-        public List<T> GetAll()
+        public virtual IEnumerable<T> GetAll()
         {
-            return dbContext.GetDbSet<T>().ToList();
+            return _objectSet.AsEnumerable();
         }
 
-        public T GetById(int id)
+        public virtual async Task<ICollection<T>> GetAllAsync()
         {
-            return this.dbContext.GetDbSet<T>().Find(id);
-        }
-        public T GetByPhrase(string phrase)
-        {
-            return this.dbContext.GetDbSet<T>().Find(phrase);
+            return await _objectSet.ToListAsync();
         }
 
-        public void Insert(T obj)
+        public virtual T GetById(int id)
         {
-            this.dbContext.GetDbSet<T>().Add(obj);
-            this.dbContext.SaveChanges();
+            return _objectSet.Find(id);
         }
 
-        public void Delete(T obj)
+        public virtual T Insert(T obj)
         {
-            this.dbContext.GetDbSet<T>().Remove(obj);
+            _objectSet.Add(obj);
+            this.Save();
+            return obj;
+        }
+
+        public virtual T Update(T obj)
+        {
+            _objectSet.AddOrUpdate(obj);
+            return obj;
+        }
+
+        public virtual void Delete(T obj)
+        {
+            _objectSet.Remove(obj);
+        }
+
+
+        public void Save()
+        {
+            _dbContext.SaveChanges();
         }
 
 
