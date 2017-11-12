@@ -15,7 +15,7 @@ namespace DPL.Controllers
         // GET api/values
         public string Get()
         {
-            userService.UserExist("asd");
+            userService.UserExist("kolakpk@gmail.com");
 
             return "poszlo";
         }
@@ -23,6 +23,7 @@ namespace DPL.Controllers
         // GET api/values/5
         public string Get(int id)
         {
+            userService.AcceptPassword("kolakpk@gmai.com", "admin");
             return "value";
         }
 

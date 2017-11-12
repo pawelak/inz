@@ -38,3 +38,5 @@ C:\Users\pawel\Source\Repos\inz\DBL\bin\Microsoft.CodeDom.Providers.DotNetCompil
 C:\Users\pawel\Source\Repos\inz\DBL\obj\Debug\DBL.dll
 C:\Users\pawel\Source\Repos\inz\DBL\obj\Debug\DBL.pdb
 C:\Users\pawel\Source\Repos\inz\DBL\obj\Debug\DBL.csprojResolveAssemblyReference.cache
+C:\Users\pawel\Source\Repos\inz\DBL\obj\Debug\DBL.Migrations.Init.resources
+C:\Users\pawel\Source\Repos\inz\DBL\obj\Debug\DBL.csproj.GenerateResource.Cache

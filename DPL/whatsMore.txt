@@ -1,6 +1,6 @@
 ﻿What i need:
 Controllers:
-1. USER add, delete, mofify, confirm password, exist - i will use in first view "loginPanel"
+1. USER add, delete, modify, confirm password, exist - i will use in first view "loginPanel"
 	-easy authorisation(password in json:( ), i will make Oath2 but in new year
 
 2. WORD add, delete, modify, getAll(for some person) getPart-wtf? (i don't know yet) but it is shity to sent each time all data

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using DBL.Interfaces;
@@ -15,7 +16,7 @@ namespace DBL
 //        public IDbSet<Deck> Decks { get; set; }
 //        public IDbSet<Stat> Stats { get; set; }
 
-        public DataContext() : base("name=FiszkiDb")
+        public DataContext() : base("name=FlashCards")
         {
             
         }
@@ -25,11 +26,15 @@ namespace DBL
             modelBuilder.Entity<Deck>().ToTable("Deck");
             modelBuilder.Entity<Stat>().ToTable("Stat");
             modelBuilder.Entity<Word>().ToTable("Word");
+            Database.Log = (query) => Debug.Write(query); //wypisywac ma 
         }
+
 
         public IDbSet<T> GetDbSet<T>() where T : class
         {
             return Set<T>();
         }
+
+
     }
 }

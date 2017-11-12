@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace DBL.Interfaces
 {
-    public interface IEntity
+    public abstract class IEntity
     {
-        int Id { get; }
+        public int Id;
     }
 }

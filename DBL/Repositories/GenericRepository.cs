@@ -5,6 +5,7 @@ using System.Data.Entity.Core.Objects.DataClasses;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -43,7 +44,7 @@ namespace DBL.Interfaces
             return obj;
         }
 
-        public virtual T Update(T obj)
+        public virtual T InsertOrUpdate(T obj)
         {
             _objectSet.AddOrUpdate(obj);
             return obj;
@@ -54,6 +55,16 @@ namespace DBL.Interfaces
             _objectSet.Remove(obj);
         }
 
+        public T FindById(object id)
+        {
+            return _objectSet.Find(id);
+        }
+
+        public IQueryable<T> FindBy(Expression<Func<T, bool>> predicate)
+        {
+            IQueryable<T> query = _objectSet.Where(predicate);
+            return query;
+        }
 
         public void Save()
         {

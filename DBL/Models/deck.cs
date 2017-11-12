@@ -17,7 +17,7 @@ namespace DBL.Models
         public bool Public { get; set; }
 
         public virtual ICollection<Word> Words { get; set; }
-        public User User { get; set; }
+        public virtual User User { get; set; }
 
     }
 }

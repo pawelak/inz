@@ -41,6 +41,9 @@ C:\Users\pawel\Source\Repos\inz\DPL.Tests\bin\Debug\BLL.dll.config
 C:\Users\pawel\Source\Repos\inz\DPL.Tests\bin\Debug\DBL.pdb
 C:\Users\pawel\Source\Repos\inz\DPL.Tests\bin\Debug\DBL.dll.config
 C:\Users\pawel\Source\Repos\inz\DPL.Tests\bin\Debug\EntityFramework.xml
+C:\Users\pawel\Source\Repos\inz\DPL.Tests\bin\Debug\WebActivatorEx.dll
+C:\Users\pawel\Source\Repos\inz\DPL.Tests\bin\Debug\Swashbuckle.Core.dll
+C:\Users\pawel\Source\Repos\inz\DPL.Tests\bin\Debug\DPL.xml
 C:\Users\pawel\Source\Repos\inz\DPL.Tests\bin\Debug\roslyn\csc.exe
 C:\Users\pawel\Source\Repos\inz\DPL.Tests\bin\Debug\roslyn\csc.exe.config
 C:\Users\pawel\Source\Repos\inz\DPL.Tests\bin\Debug\roslyn\csc.rsp

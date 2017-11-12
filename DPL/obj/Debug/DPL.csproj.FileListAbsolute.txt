@@ -79,3 +79,13 @@ C:\Users\pawel\Source\Repos\inz\DPL\bin\EntityFramework.xml
 C:\Users\pawel\Source\Repos\inz\DPL\obj\Debug\DPL.csprojResolveAssemblyReference.cache
 C:\Users\pawel\Source\Repos\inz\DPL\obj\Debug\DPL.dll
 C:\Users\pawel\Source\Repos\inz\DPL\obj\Debug\DPL.pdb
+C:\Users\pawel\Source\Repos\inz\DPL\bin\System.Net.Http.Extensions.dll
+C:\Users\pawel\Source\Repos\inz\DPL\bin\System.Net.Http.Primitives.dll
+C:\Users\pawel\Source\Repos\inz\DPL\bin\System.Net.Http.Extensions.xml
+C:\Users\pawel\Source\Repos\inz\DPL\bin\System.Net.Http.Primitives.xml
+C:\Users\pawel\Source\Repos\inz\DPL\obj\Debug\DPL.csproj.App.config
+C:\Users\pawel\Source\Repos\inz\DPL\bin\Swashbuckle.Core.dll
+C:\Users\pawel\Source\Repos\inz\DPL\bin\WebActivatorEx.dll
+C:\Users\pawel\Source\Repos\inz\DPL\bin\DPL.xml
+C:\Users\pawel\Source\Repos\inz\DPL\bin\EntityFramework.SqlServer.dll
+C:\Users\pawel\Source\Repos\inz\DPL\bin\EntityFramework.SqlServer.xml

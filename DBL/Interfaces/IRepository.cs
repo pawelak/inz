@@ -14,8 +14,9 @@ namespace DBL.Interfaces
         Task<ICollection<T>> GetAllAsync();
         T GetById(int id);
         T Insert(T obj);
-        T Update(T obj);
         void Delete(T obj);
+        T FindById(object id);
+        IQueryable<T> FindBy(Expression<Func<T, bool>> predicate);
 
     }
 }
