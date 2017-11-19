@@ -7,17 +7,23 @@ using System.Web.Http;
 using BLL.ModelsDTO;
 using BLL.Services;
 using DBL.Repositories;
+using Microsoft.SqlServer.Server;
 
 namespace DPL.Controllers
 {
     public class UserController : ApiController
     {
-        UserService _userService = new UserService();
+        private readonly UserService _userService = new UserService();
+
+        public string Get()
+        {
+            return "welcome in WebAPI";
+        }
 
         // GET api/User?email=string&password=string
-        public bool Get(string email, string password)
+        public bool Get(string email,string password)
         {
-            return _userService.AcceptPassword(password, email);
+            return _userService.AcceptPassword(email, password);
         }
 
         public bool Get(string email)
@@ -27,11 +33,12 @@ namespace DPL.Controllers
 
         // POST api/User
         public IHttpActionResult Post([FromBody] UserDto userDto)
+
+
         {
-            // var response = Request.CreateResponse(HttpStatusCode.OK, "value");
-
-
-            return Ok();
+            var c = _userService.AddUser(userDto);
+            var response = Request.CreateResponse(HttpStatusCode.OK,c);
+            return Ok(c);
         }
     }
 }

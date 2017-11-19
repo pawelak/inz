@@ -11,5 +11,6 @@ namespace BLL.ModelsDTO
         public string Name { get; set; }
         public string Decdescription { get; set; }
         public int NumberOfWords { get; set; }
+        public bool Public { get; set; }
     }
 }

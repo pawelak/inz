@@ -15,21 +15,27 @@ namespace DPL.Controllers
         // GET api/values
         public string Get()
         {
-            userService.UserExist("kolakpk@gmail.com");
 
-            return "poszlo";
+
+
+            return userService.UserExist("kolakpk@gmail.com") ? "prawd" : "fałsz";
         }
 
         // GET api/values/5
         public string Get(int id)
         {
-            userService.AcceptPassword("kolakpk@gmai.com", "admin");
+            if (userService.AcceptPassword("kolakpk@gmai.com", "admin"))
+            {
+                return "baza jest";
+            }
+           
             return "value";
         }
 
         // POST api/values
-        public void Post([FromBody]string value)
+        public IHttpActionResult Post([FromBody]string value)
         {
+            return Ok("dupadupa");
         }
 
         // PUT api/values/5

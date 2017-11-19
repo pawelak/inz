@@ -20,31 +20,34 @@ namespace BLL.Services
 
         public bool UserExist(string email)
         {
-            return uow.Repository<User>().FindBy(user => user.Email.Equals(email)).Any();
+            var h = uow.Repository<User>().FindBy(user => user.Email.Equals(email));
+            var h2 = h.ToList();
+            return h.Any();
         }
-        public bool AcceptPassword(string pass, string email)
+        public bool AcceptPassword(string email, string pass)
         {
-            return uow.Repository<User>().FindBy(u => u.Email.Equals(email) && u.Password.Equals(pass)).Any();
-        }
+            var user = uow.Repository<User>().FindBy(u => u.Email.Equals(email) && u.Password.Equals(pass));
+            var h = user.ToList();
+            return user.Any();
+         }
 
         public string AddUser(UserDto userDto)
         {
             try
             {
-                if (!UserExist(userDto.Email)) return "użytkownik znajduje się już w bazie";
+                if (UserExist(userDto.Email))
+                {
+                    return "użytkownik znajduje się już w bazie";
+                }
                 uow.Repository<User>()
-                    .Insert(new User() {Name = userDto.Name, Email = userDto.Email, Firstname = userDto.Firstname});
-                return null;
+                    .Insert(new User() {Email = userDto.Email, Name = userDto.Login, Password = userDto.Password});
+                return "konto utworzone";
             }
             catch (Exception e)
             {
                 return "błąd podczas tworzenia konta";
             }
         }
-
-   
-
-
 
     }
 }

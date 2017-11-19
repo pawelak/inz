@@ -1,0 +1,192 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <title>FlashCard</title>
+    <meta charset="utf-8"/>
+    <meta name="flashcard" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="assets/css/game.css"/>
+
+</head>
+<body>
+
+
+<div style="width: 100%;">
+    <!-- Main Div -->
+    <div class="navbar">
+        <a href="#home">Home</a>
+        <a href="#news">News</a>
+        <a href="#" id="loginBox">Login</a>
+    </div>
+    <div style="float: left; width: 30%; padding: 5% 1%">
+
+        <div id="myDIV" class="column">
+            <h2 style="margin: 5px">Talie</h2>
+            <input type="text" id="myInput" placeholder="Tytuł...">
+            <span onclick="newElement()" class="button">Dodaj</span>
+        </div>
+
+        <ul id="myUL">
+            <li>dupa </li>
+        </ul>
+       
+    </div>
+    <div style="float: left; width: 65%; padding: 5% 1%">
+        <div style="float: left; width: 60%;" class="column">
+            <span onclick="" class="button">Zmień kolejność</span>
+            <h2 id="word" style="padding: 1% 1% 1% 1%">gra</h2>
+            <input type="text" id="myInput" placeholder="odpowiedź">
+            <span onclick="" class="button">Akceptuj</span>
+            <span onclick="" class="button">nie wiem</span>
+        </div>
+        <div style="float: left; width: 40%; padding: 0 0 0 3%">
+            <div style="float: left; width: 110%" class="column">
+                <table style="width: 100%; padding: 1% 1% 1% 1%">
+                    <tr>
+                        <td >ile</td>
+                        <td id="info1">123</td>
+                    </tr>
+                    <tr>
+                        <td >ile</td>
+                        <td id="info2">123</td>
+                    </tr>
+                    <tr>
+                        <td>Eve</td>
+                        <td id="info3">1%</td>
+                    </tr>
+                    <tr>
+                        <td>John</td>
+                        <td id="info4">213</td>
+                    </tr>
+                </table>
+
+
+            </div>
+        </div>
+    </div>
+
+    <div>
+        Footer
+    </div>
+</div>
+
+<script>
+
+
+</script>
+
+<script>
+//global values
+    var ListOdDecks;
+    var email;
+
+// on load 
+    window.onload = function() {
+        email = sessionStorage.getItem("email");
+        if (email) {
+            document.getElementById("loginBox").innerHTML = "Witaj " + email + "!";
+
+            // download list of Decks
+            $.ajax({
+                url: 'http://localhost:60482/api/Decks?email=' + email,
+                type: "Get",
+                dataType: 'json',
+                success: function(response) {
+                    if (response) {
+                        ListOdDecks = response;
+                        var i;
+                        for (i = 0; i < ListOdDecks.length; i++) {
+                            var elem = document.createElement("li");
+                            elem.value = "liName" +i;
+                            elem.innerHTML = ListOdDecks[i].Name;
+                            document.getElementById("myUL").appendChild(elem);
+                        }
+
+                     // Create a "edit" button and append it to each list item
+                        var myNodelist = document.getElementsByTagName("LI");
+
+                        for (i = 0; i < myNodelist.length; i++) {
+                            var span = document.createElement("SPAN");
+                            var txt = document.createTextNode("edit");
+                            span.className = "close";
+                            span.appendChild(txt); 
+                            myNodelist[i].appendChild(span);
+                        }
+                    }
+                },
+                failure: function(response) {
+                    alert(response);
+                    alert(response.responseText);
+                },
+                error: function(response) {
+                    alert(response);
+                    alert(response.responseText);
+                }
+            });
+            
+
+        } else {
+            // window.location.replace("login.html"); //odkomentować w wersji ostatecznej!!!!!!
+        }
+
+    }
+
+// Add a "checked" symbol when clicking on a list item
+    var list = document.querySelector('ul');
+    list.addEventListener('click',
+        function (ev) {
+            if (ev.target.tagName === 'LI') {
+                ev.target.classList.toggle('checked');
+            }
+        },
+        false);
+
+// Click on a edit button to move to edit mode!!!! dorobić
+    var close = document.getElementsByClassName("edit");
+    var i;
+    for (i = 0; i < close.length; i++) {
+        close[i].onclick = function() {
+            var div = this.parentElement;
+            div.style.display = "none";
+        }
+        //tu dodawanie do listy
+    }
+
+
+
+
+// Create a new list item when clicking on the "Add" button!!!!!
+    function newElement() {
+        var li = document.createElement("li");
+        var inputValue = document.getElementById("myInput").value;
+        var t = document.createTextNode(inputValue);
+        li.appendChild(t);
+        if (inputValue === '') {
+            alert("You must write something!");
+        } else {
+            document.getElementById("myUL").appendChild(li);
+        }
+        document.getElementById("myInput").value = "";
+
+        var span = document.createElement("SPAN");
+        var txt = document.createTextNode("edit");
+        span.className = "close";
+        span.appendChild(txt);
+        li.appendChild(span);
+
+        for (i = 0; i < close.length; i++) {
+            close[i].onclick = function() {
+                var div = this.parentElement;
+                div.style.display = "none";
+            }
+        }
+    }
+</script>
+
+
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/skel.min.js"></script>
+<script src="assets/js/util.js"></script>
+<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+<script src="assets/js/main.js"></script>
+</body>
+</html>
