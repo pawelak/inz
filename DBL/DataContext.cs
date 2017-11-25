@@ -22,11 +22,13 @@ namespace DBL
         }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>().ToTable("User");
-            modelBuilder.Entity<Deck>().ToTable("Deck");
+            modelBuilder.Entity<User>().ToTable("User").HasMany(u => u.Decks).WithRequired(u => u.User).WillCascadeOnDelete(true);
+            modelBuilder.Entity<Deck>().ToTable("Deck").HasMany(d => d.Words).WithRequired(d => d.Deck).WillCascadeOnDelete(true);
             modelBuilder.Entity<Stat>().ToTable("Stat");
             modelBuilder.Entity<Word>().ToTable("Word");
             Database.Log = (query) => Debug.Write(query); //wypisywac ma 
+
+            base.OnModelCreating(modelBuilder);
         }
 
 

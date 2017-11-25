@@ -1,0 +1,223 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <title>FlashCard</title>
+    <meta charset="utf-8"/>
+    <meta name="flashcard" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="assets/css/game.css"/>
+
+</head>
+<body>
+
+
+<div style="width: 100%;">
+    <!-- Main Div -->
+    <div class="navbar">
+        <a href="#" id="loginBox">Login</a>
+    </div>
+    <div style="float: left; width: 60%; padding: 5% 1%">
+        <div class="column">
+            <h4 style="margin: 5px">Nazwa Talii:</h4>
+            <input type="text" id="myInputName" placeholder="brak">
+            <h4 style="margin: 5px">Opis Talii:</h4>
+            <input type="text" id="myInputDes">
+            <span onclick="setInfo()" class="button">Popraw</span>
+        </div>
+        
+        <div style="padding: 1% 1%"></div>
+ 
+        
+
+        <div id="myDIV" class="column">
+            <ul id="myUL">
+
+            </ul>
+        </div>
+
+
+
+    </div>
+    <div style="float: left; width: 36%; padding: 5% 1%">
+        <div id="myDIV2" class="column" style="padding: 2% 2%">
+            <input type="text" id="Word1" placeholder="Słowo1" >
+            <input type="text" id="Word2" placeholder="Słowo2">
+            <span onclick="seti()" class="button">Popraw</span>
+            <span onclick="seti()" class="button">Dodaj</span>
+        </div>
+
+    </div>
+
+    <div>
+        Footer
+    </div>
+</div>
+
+
+
+<script>
+//global variable
+
+    var email;
+    var deckId;
+    var listOfWords;
+    var deckInfo;
+
+    function seti() {
+        document.getElementById("myInputName").value = "dupa:";
+        document.getElementById("myInputDes").placeholder = "asda:";
+
+    }
+
+//onload
+    window.onload = function ()
+    {
+        email = sessionStorage.getItem("email");
+        deckId = sessionStorage.getItem("deckId");
+        if (email)
+        {
+            document.getElementById("loginBox").innerHTML = "Witaj " + email + "!";
+            
+            getInfo();
+            getList();
+      
+        }
+    }
+
+    function getList() {
+        $.ajax({
+            url: `http://localhost:60482/api/Decks?deckId=${deckId}&email=${email}`,
+            type: "GET",
+            dataType: 'json',
+            success: function (response) {
+                listOfWords = response;
+                printDeck();
+            },
+            failure: function(response) {
+                alert(response);
+                alert(response.responseText);
+            },
+            error: function(response) {
+                alert(response);
+                alert(response.responseText);
+            }
+
+        });
+    }
+
+    function getInfo() {
+        
+        $.ajax({
+            url: `http://localhost:60482/api/Decks?deckId=${deckId}`,
+            type: "GET",
+            dataType: 'json',
+            success: function (response) {
+                deckInfo = response;
+                document.getElementById("myInputName").placeholder = deckInfo.Name;
+                document.getElementById("myInputDes").placeholder = deckInfo.Description;
+            },
+            failure: function (response) {
+                alert(response);
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response);
+                alert(response.responseText);
+            }
+
+        });
+    }
+
+    function setInfo() {
+        if (document.getElementById("myInputName").value !== "" && document.getElementById("myInputDes").value !== "") {
+            deckInfo.Name = document.getElementById("myInputName").value;
+            deckInfo.Description = document.getElementById("myInputDes").value;
+            $.ajax({
+                url: `http://localhost:60482/api/Decks?email=${email}`,
+                type: "Post",
+                dataType: 'json',
+                data: {
+                    "Id": deckInfo.Id,
+                    "Name": deckInfo.Name,
+                    "Description": deckInfo.Description,
+                    "NumberOfWords": deckInfo.NumberOfWords,
+                    "Public": false
+                },
+                success: function(response) {
+                    //deckInfo = response;    // dopisać zwrotkę poprawki
+                    document.getElementById("myInputName").value = "";
+                    document.getElementById("myInputDes").value = "";
+//                document.getById("myInputName").placeholder = deckInfo.Name;
+//                document.getById("myInputDes").placeholder = deckInfo.Description;
+                    getInfo();
+                },
+                failure: function(response) {
+                    alert(response);
+                    alert(response.responseText);
+                },
+                error: function(response) {
+                    alert(response);
+                    alert(response.responseText);
+                }
+
+            });
+        } else
+            alert("Uzupełnij nazwę i opis");
+    }
+
+    function printDeck()
+    {
+        var i;
+        for (i = 0; i < listOfWords.length; i++)
+        {
+            var elem = document.createElement("li");
+            elem.id = listOfWords[i].Id;
+            elem.innerHTML = listOfWords[i].Word1 + " - " + listOfWords[i].Word2;
+            document.getElementById("myUL").appendChild(elem);
+            var span = document.createElement("SPAN");
+            var txt = document.createTextNode("usuń");
+            span.className = "edit";
+            span.appendChild(txt);
+            elem.appendChild(span);
+        }
+    }
+
+    function sendWord() 
+    {
+
+        if (document.getElementById("Word1").value !== "" && document.getElementById("Word2").value !== "") {
+            $.ajax({
+                url: `http://localhost:60482/api/Decks?deckId=${deckId}`,
+                type: "Put",
+                dataType: 'json',
+                data: {
+                    "Word1": document.getElementById("Word1").value,
+                    "Word2": document.getElementById("Word2").value
+
+                },
+                success: function(response) {
+
+                },
+                failure: function(response) {
+                    alert(response);
+                    alert(response.responseText);
+                },
+                error: function(response) {
+                    alert(response);
+                    alert(response.responseText);
+                }
+
+            });
+        }
+    }
+
+
+</script>
+
+
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/skel.min.js"></script>
+<script src="assets/js/util.js"></script>
+<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+<script src="assets/js/main.js"></script>
+</body>
+</html>

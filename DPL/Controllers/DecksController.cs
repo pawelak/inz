@@ -26,19 +26,33 @@ namespace DPL.Controllers
             return result;
         }
 
-        // POST: api/Decks
-        public void Post([FromBody]string value)
+        public DeckDto Get(int deckId)
         {
+            return _decksService.GetInfo(deckId);
+        }
+
+        public List<WordDto> Get(string email, int deckId)
+        {
+            return _decksService.GetListOfWords(email, deckId);
+        }
+
+
+        // POST: api/Decks
+        public int Post([FromBody]DeckDto deckDto, string email)
+        {
+            return _decksService.UpdateDeck(email, deckDto);
         }
 
         // PUT: api/Decks/5
-        public void Put(int id, [FromBody]string value)
+        public int Put([FromBody]DeckDto deckDto, string email)
         {
+            return _decksService.AddDeck(deckDto, email);
         }
 
         // DELETE: api/Decks/5
-        public void Delete(int id)
+        public int Delete(string email, int deckId)
         {
+            return _decksService.RemoveDeck(email, deckId);
         }
     }
 }

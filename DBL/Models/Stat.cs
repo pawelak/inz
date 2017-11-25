@@ -16,7 +16,7 @@ namespace DBL.Models
         public int NoCounter { get; set; }
         public DateTime LastUsage { get; set; }
         public DateTime NextUsage { get; set; }
-        public double KnowLevel { get; set; }
+        public int KnowLevel { get; set; }
         public int LastAnswer { get; set; }
 
         public virtual Word Word { get; set; }
@@ -27,7 +27,7 @@ namespace DBL.Models
             NoCounter = 0;
             LastUsage = DateTime.Now;
             NextUsage = DateTime.Now;
-            KnowLevel = 0.0;
+            KnowLevel = 0;
         }
         public Stat(Word word)
         {
@@ -35,7 +35,7 @@ namespace DBL.Models
             NoCounter = 0;
             LastUsage = DateTime.Now;
             NextUsage = DateTime.Now;
-            KnowLevel = 0.0;
+            KnowLevel = 0;
             Word = word;
         }
 

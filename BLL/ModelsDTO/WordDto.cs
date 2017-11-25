@@ -16,7 +16,9 @@ namespace BLL.ModelsDTO
         public int YesCounter { get; set; }
         public int NoCounter { get; set; }
         public DateTime LastUsage { get; set; }
-        public double KnowLevel { get; set; }
+        public int KnowLevel { get; set; }
         public int LastAnswer { get; set; }
+        public bool Started { get; set; }
+        public DateTime NextUsage { get; set; }
     }
 }

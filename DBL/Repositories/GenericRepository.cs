@@ -13,7 +13,7 @@ namespace DBL.Interfaces
 {
     public class GenericRepository<T> : IRepository<T> where T : class
     {
-        private readonly IDataContext _dbContext;
+        private IDataContext _dbContext;
         readonly IDbSet<T> _objectSet;
 
         public GenericRepository(IDataContext dataContext)
@@ -50,9 +50,23 @@ namespace DBL.Interfaces
             return obj;
         }
 
-        public virtual void Delete(T obj)
+        public virtual void Edit(T obj)
         {
-            _objectSet.Remove(obj);
+            _dbContext.Entry(obj).State = EntityState.Modified;
+            Save();
+        }
+
+        public virtual void Attach(T obj)
+        {
+            _objectSet.Attach(obj);
+
+        }
+
+        public virtual void Delete(int id)
+        {
+            var obj = FindById(id);
+            _dbContext.Entry(obj).State = EntityState.Deleted;
+            Save();
         }
 
         public T FindById(object id)

@@ -1,15 +1,1 @@
-C:\Users\pawel\Source\Repos\inz\BLL.Tests\bin\Debug\BLL.Tests.dll
-C:\Users\pawel\Source\Repos\inz\BLL.Tests\bin\Debug\BLL.Tests.pdb
-C:\Users\pawel\Source\Repos\inz\BLL.Tests\bin\Debug\BLL.dll
-C:\Users\pawel\Source\Repos\inz\BLL.Tests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
-C:\Users\pawel\Source\Repos\inz\BLL.Tests\bin\Debug\BLL.pdb
-C:\Users\pawel\Source\Repos\inz\BLL.Tests\bin\Debug\BLL.dll.config
-C:\Users\pawel\Source\Repos\inz\BLL.Tests\bin\Debug\pl\Microsoft.VisualStudio.QualityTools.UnitTestFramework.resources.dll
 C:\Users\pawel\Source\Repos\inz\BLL.Tests\obj\Debug\BLL.Tests.csprojResolveAssemblyReference.cache
-C:\Users\pawel\Source\Repos\inz\BLL.Tests\obj\Debug\BLL.Tests.dll
-C:\Users\pawel\Source\Repos\inz\BLL.Tests\obj\Debug\BLL.Tests.pdb
-C:\Users\pawel\Source\Repos\inz\BLL.Tests\bin\Debug\DBL.dll
-C:\Users\pawel\Source\Repos\inz\BLL.Tests\bin\Debug\EntityFramework.dll
-C:\Users\pawel\Source\Repos\inz\BLL.Tests\bin\Debug\DBL.pdb
-C:\Users\pawel\Source\Repos\inz\BLL.Tests\bin\Debug\DBL.dll.config
-C:\Users\pawel\Source\Repos\inz\BLL.Tests\bin\Debug\EntityFramework.xml

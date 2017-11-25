@@ -84,6 +84,7 @@
     <Compile Include="Services\DecksService.cs" />
     <Compile Include="Services\GameModuleService.cs" />
     <Compile Include="Services\UserService.cs" />
+    <Compile Include="Services\WordService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DBL\DBL.csproj">

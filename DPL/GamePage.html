@@ -13,8 +13,6 @@
 <div style="width: 100%;">
     <!-- Main Div -->
     <div class="navbar">
-        <a href="#home">Home</a>
-        <a href="#news">News</a>
         <a href="#" id="loginBox">Login</a>
     </div>
     <div style="float: left; width: 30%; padding: 5% 1%">
@@ -26,36 +24,41 @@
         </div>
 
         <ul id="myUL">
-            <li>dupa </li>
+
         </ul>
        
     </div>
     <div style="float: left; width: 65%; padding: 5% 1%">
         <div style="float: left; width: 60%;" class="column">
             <span onclick="" class="button">Zmień kolejność</span>
-            <h2 id="word" style="padding: 1% 1% 1% 1%">gra</h2>
-            <input type="text" id="myInput" placeholder="odpowiedź">
-            <span onclick="" class="button">Akceptuj</span>
+            <h2 id="word" style="padding: 1% 1% 1% 1%">gra- wybierz talię i akceptuj</h2>
+            <h2 id="Answer" style="padding: 1% 1% 1% 1%">test</h2>
+            <input type="text" id="answerIn" placeholder="odpowiedź">
+            <span onclick="rand()" class="button">Akceptuj</span>
             <span onclick="" class="button">nie wiem</span>
         </div>
         <div style="float: left; width: 40%; padding: 0 0 0 3%">
             <div style="float: left; width: 110%" class="column">
                 <table style="width: 100%; padding: 1% 1% 1% 1%">
                     <tr>
-                        <td >ile</td>
-                        <td id="info1">123</td>
+                        <td >Poprawne odpowiedzi:</td>
+                        <td id="YesCo">0</td>
                     </tr>
                     <tr>
-                        <td >ile</td>
-                        <td id="info2">123</td>
+                        <td >Błedne odpowiedzi:</td>
+                        <td id="NoCo">0</td>
                     </tr>
                     <tr>
-                        <td>Eve</td>
-                        <td id="info3">1%</td>
+                        <td>Ostatnia odpowiedź: </td>
+                        <td id="LastAns">0</td>
                     </tr>
                     <tr>
-                        <td>John</td>
-                        <td id="info4">213</td>
+                        <td>Ostatnio odpowiadane: </td>
+                        <td id="LastAnsD">0</td>
+                    </tr>
+                    <tr>
+                        <td>Znajomość: </td>
+                        <td id="Know">0</td>
                     </tr>
                 </table>
 
@@ -76,9 +79,16 @@
 
 <script>
 //global values
-    var ListOdDecks;
+    var ListOfDecks;
     var email;
+    var triggeredList=[];
+    var currentWord;
+    var currentId = 0;
+    var currentSite = 1;
 
+
+
+    sessionStorage.removeItem('deckId');
 // on load 
     window.onload = function() {
         email = sessionStorage.getItem("email");
@@ -92,25 +102,9 @@
                 dataType: 'json',
                 success: function(response) {
                     if (response) {
-                        ListOdDecks = response;
-                        var i;
-                        for (i = 0; i < ListOdDecks.length; i++) {
-                            var elem = document.createElement("li");
-                            elem.value = "liName" +i;
-                            elem.innerHTML = ListOdDecks[i].Name;
-                            document.getElementById("myUL").appendChild(elem);
-                        }
+                        ListOfDecks = response;
+                        printDeck();
 
-                     // Create a "edit" button and append it to each list item
-                        var myNodelist = document.getElementsByTagName("LI");
-
-                        for (i = 0; i < myNodelist.length; i++) {
-                            var span = document.createElement("SPAN");
-                            var txt = document.createTextNode("edit");
-                            span.className = "close";
-                            span.appendChild(txt); 
-                            myNodelist[i].appendChild(span);
-                        }
                     }
                 },
                 failure: function(response) {
@@ -130,55 +124,236 @@
 
     }
 
+
+
 // Add a "checked" symbol when clicking on a list item
     var list = document.querySelector('ul');
     list.addEventListener('click',
         function (ev) {
             if (ev.target.tagName === 'LI') {
                 ev.target.classList.toggle('checked');
+                var h = parseInt(ev.target.id.substring(3));
+                var ind = triggeredList.indexOf(h);
+                if (ind === -1) {
+                    triggeredList.push(h);
+                } else {
+                    triggeredList[ind] = -1;
+                }
             }
         },
         false);
 
-// Click on a edit button to move to edit mode!!!! dorobić
-    var close = document.getElementsByClassName("edit");
-    var i;
-    for (i = 0; i < close.length; i++) {
-        close[i].onclick = function() {
-            var div = this.parentElement;
-            div.style.display = "none";
+//// Click on a edit button to move to edit mode!!!! dorobić
+//    var close = document.getElementsByClassName("edit");
+//    var i;
+//    for (i = 0; i < close.length; i++) {
+//        close[i].onclick = function() {
+//            var div = this.parentElement;
+//            div.style.display = "none";
+//        }
+//    }
+
+  
+// Create a new list item when clicking on the "Add" button!!!!!
+    function newElement() {
+        //var li = document.createElement("li");
+        var inputValue = document.getElementById("myInput").value;
+        //var t = document.createTextNode(inputValue);
+        //li.appendChild(t);
+        if (inputValue === '') {
+            alert("Musisz coś wpisać!");
+        } else {
+  
+            //document.getElementById("myUL").appendChild(li);
+            $.ajax({
+                url: 'http://localhost:60482/api/Decks?email=' + email,
+                type: "Put",
+                dataType: 'json',
+                data: {
+                    "Name": inputValue,
+                    "Public": false
+                },
+                success: function (response) {  
+                    if (response) {
+                        alert(response);
+
+                        if (response > 0)
+                        {
+                            var elem = document.createElement("li");
+                            elem.id = "li_" + response;
+                            elem.innerHTML = inputValue;
+                            document.getElementById("myUL").appendChild(elem);
+
+                            var span = document.createElement("SPAN");
+                            var txt = document.createTextNode("edit");
+                            span.className = "edit";
+                            span.appendChild(txt);
+                            elem.appendChild(span);
+
+                            document.getElementById("myUL").appendChild(elem);
+
+                        }
+                    } else {
+                        alert("talia nie może być utworzona");
+                    }
+                },
+                failure: function (response) {
+                    alert(response);
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response);
+                    alert(response.responseText);
+                }
+
+            });
         }
-        //tu dodawanie do listy
+        
     }
 
 
+    function printDeck() {
+        var i;
+        for (i = 0; i < ListOfDecks.length; i++) {
+            var elem = document.createElement("li");
+            elem.id = "li_" + ListOfDecks[i].Id;
+            elem.innerHTML = ListOfDecks[i].Name;
+            document.getElementById("myUL").appendChild(elem);
+            var span = document.createElement("SPAN");
+            var txt = document.createTextNode("edit");
+            span.className = "edit";
+            span.appendChild(txt); 
+            elem.appendChild(span);
+            span.id = ListOfDecks[i].Id;
+            span.onclick = savaAndMove();
 
-
-// Create a new list item when clicking on the "Add" button!!!!!
-    function newElement() {
-        var li = document.createElement("li");
-        var inputValue = document.getElementById("myInput").value;
-        var t = document.createTextNode(inputValue);
-        li.appendChild(t);
-        if (inputValue === '') {
-            alert("You must write something!");
-        } else {
-            document.getElementById("myUL").appendChild(li);
         }
-        document.getElementById("myInput").value = "";
 
-        var span = document.createElement("SPAN");
-        var txt = document.createTextNode("edit");
-        span.className = "close";
-        span.appendChild(txt);
-        li.appendChild(span);
+    }
 
+    function savaAndMove() {
+        var close = document.getElementsByClassName("edit");
+        var i;
         for (i = 0; i < close.length; i++) {
             close[i].onclick = function() {
-                var div = this.parentElement;
-                div.style.display = "none";
+                sessionStorage.setItem("deckId", this.id);
+                window.location.replace("EditPanel.html");
             }
         }
+    }
+
+    function check() {
+        var answer = document.getElementById("answerIn").value;
+        if (currentWord != null) {
+            if (answer !== "") {
+                var rightAns = (currentSite === 1 ? currentWord.Word2 : currentWord.Word1);
+                if (answer.toLowerCase() === rightAns.toLowerCase()) {
+                    setResult(1);
+                    currentWord.YesCounter++;
+                    currentWord.KnowLevel ? currentWord.KnowLevel = 15 : currentWord.KnowLevel += 15;
+                    currentWord.Started = true;
+
+                    $.ajax({
+                        url: 'http://localhost:60482/api/GameModule' + email,
+                        type: "Post",
+                        dataType: 'json',
+                        data: {
+                            "Name": inputValue,
+                            "Public": false
+                        },
+                        success: function (response) {  
+
+
+                        },
+                        failure: function (response) {
+                            alert(response);
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response);
+                            alert(response.responseText);
+                        }
+
+                    });
+
+                }
+
+            } else {
+                alert("odpowiedź pusta");
+            }
+        } else {
+            rand(); 
+        }
+        
+    }
+
+    function rand() {
+        if (triggeredList.some(checkActive)) {
+            currentId = nextDeck(currentId);
+            $.ajax({
+                url: `http://localhost:60482/api/GameModule?id=${currentId}&email=${email}`,
+                type: "GET",
+                dataType: 'json',
+                success: function(response) {
+                    if (response) {
+                        currentWord = response;
+                        document.getElementById('word').innerHTML =
+                            (currentSite === 1 ? response.Word1 : response.Word2);
+                        document.getElementById('NoCo').innerHTML = response.NoCounter;
+                        document.getElementById('Yesco').innerHTML = response.YesCounter;
+                        document.getElementById('LastAns').innerHTML = response.LastAnswer;
+                        document.getElementById('LastAnsD').innerHTML = response.LastUsage;
+                        document.getElementById('Know').innerHTML = response.KnowLevel;
+                    } else {
+                        alert("talia pusta!!!");
+                    } 
+                },
+                failure: function(response) {
+                    alert(response);
+                    alert(response.responseText);
+                },
+                error: function(response) {
+                    alert(response);
+                    alert(response.responseText);
+                }
+
+            });
+        } else {
+            alert("wybierz listę");
+        }
+       
+    }
+
+    function setResult(ans) {
+        var line = document.getById("Answer");
+        switch (ans) {
+            case -1:
+                line.innerHTML = "ŻLE";
+                line.style.color = "red";
+                break;
+            case 1:
+                line.innerHTML = "DOBRZE!!!";
+                line.style.color = "green";
+                break;
+            default:
+                line.innerHTML = "";
+        }
+    }
+
+
+    function nextDeck(deckId) { 
+        while (true) {
+            if (triggeredList.length < deckId + 1) deckId = 0;
+            alert(deckId + " " + triggeredList[deckId]);
+            if (triggeredList[deckId] > 0) {
+                return triggeredList[deckId];
+            }
+            deckId++;
+        }
+    } 
+
+    function checkActive(act) {
+        return act > 0;
     }
 </script>
 
