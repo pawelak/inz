@@ -18,75 +18,57 @@ namespace BLL.Services
         }
 
         // ADD - you can add word just wit empty Stats
-        public int AddWord(string email, int deckId, WordDto wordDto)
+        public WordDto AddWord(string email, int deckId, WordDto wordDto)
         {
-            var deckObj = _uow.Repository<Deck>().GetById(deckId);
+            var ret = new Word();
+            var deckObj = _uow.Repository<Deck>().FindById(deckId);
             if (!deckObj.User.Email.Equals(email))
             {
-                return -1;
+                return null;
             }
-            var stat = new Stat()
-            {
-                KnowLevel = 0,
-                LastAnswer = 0,
-                LastUsage = DateTime.Now,
-                NextUsage = DateTime.Now,
-                NoCounter = 0,
-                YesCounter = 0
-
-
-            };
-            var word = new Word()
-            {
-                Deck = deckObj,
-                Language1 = wordDto.Language1,
-                Language2 = wordDto.Language2,
-                Started = false,
-                Stat = stat,
-                Word1 = wordDto.Word1,
-                Word2 = wordDto.Word2
-            };
+            var word = new Word(wordDto.Word1, wordDto.Word2,deckObj);
             try
             {
-                _uow.Repository<Word>().Insert(word);
+                ret = _uow.Repository<Word>().Insert(word);
             }
             catch (Exception e)
             {
-                return -1;
+                return null;
             }
-            return 0;
+            return new WordDto(ret.Id, ret.Word1, ret.Word2, ret.Stat.Id, ret.Stat.YesCounter, ret.Stat.NoCounter,
+                ret.Stat.LastUsage, ret.Stat.KnowLevel, ret.Stat.LastAnswer, ret.Started, ret.Stat.NextUsage);
         }
 
  // Update, it is jut possible to modify words fields or (in future) languages
         public int UpdateWord(string email, int deckId, WordDto wordDto)
         {
-            var deckObj = _uow.Repository<Deck>().GetById(deckId);
+            var deckObj = _uow.Repository<Deck>().FindById(deckId);
             if (!deckObj.User.Email.Equals(email))
             {
                 return -1;
             }
             var wordForEdit = _uow.Repository<Word>().FindById(wordDto.Id);
-
+            if (wordForEdit == null)
+            {
+                return -1;
+            }
             wordForEdit.Word1 = wordDto.Word1;
             wordForEdit.Word2 = wordDto.Word2;
-            wordForEdit.Language1 = wordDto.Language1;
-            wordForEdit.Language2 = wordDto.Language2;
             try
             {
                 _uow.Repository<Word>().Edit(wordForEdit);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Console.WriteLine(e);
                 return -1;
             }
-            return 0;
+            return 1;
         }
 
 
         public int RemoveWord(string email, int deckId, int wordId)
         {
-            var deckObj = _uow.Repository<Deck>().GetById(deckId);
+            var deckObj = _uow.Repository<Deck>().FindById(deckId);
             if (!deckObj.User.Email.Equals(email))
             {
                 return -1;
@@ -96,13 +78,12 @@ namespace BLL.Services
                 _uow.Repository<Stat>().Delete(wordId);
                 _uow.Repository<Word>().Delete(wordId);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Console.WriteLine(e);
                 return -1;
             }
             
-            return 0;
+            return 1;
         }
     }
 }

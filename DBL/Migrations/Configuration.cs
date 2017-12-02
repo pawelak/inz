@@ -73,20 +73,8 @@ namespace DBL.Migrations
 
 
             //users
-            var user1 = new User()
-            {
-                Name = "admin",
-                Firstname = "pawel",
-                Email = "kolakpk@gmail.com",
-                Password = "admin"
-            };
-            var user2 = new User()
-            {
-                Name = "student",
-                Firstname = "zbyszek",
-                Email = "zibi@gmail.com",
-                Password = "student"
-            };
+            var user1 = new User("admin","kolakpk@gmail.com","admin");
+            var user2 = new User("student","zibi@gmail.com","student");
             context.GetDbSet<User>().AddOrUpdate(user1);
             context.GetDbSet<User>().AddOrUpdate(user2);
             
@@ -95,7 +83,7 @@ namespace DBL.Migrations
             {
                 Id = 1,
                 Name = "ang 1",
-                Decdescription = "talia ang",
+                Description = "talia ang",
                 Public = true,
                 User = user1
             };
@@ -104,7 +92,7 @@ namespace DBL.Migrations
             {
                 Id = 2,
                 Name = "ciekawostki",
-                Decdescription = "talia adma ciekawostki",
+                Description = "talia adma ciekawostki",
                 Public = false,
                 User = user2
             };
@@ -113,7 +101,6 @@ namespace DBL.Migrations
             {
                 Id = 3,
                 Name = "ang moj",
-                Decdescription = "talia moja ang",
                 Public = false,
                 User = user2
             };
@@ -124,8 +111,6 @@ namespace DBL.Migrations
             //Words
             var word1 = new Word()
             {
-                Language1 = "pl",
-                Language2 = "en",
                 Word1 = "dom",
                 Word2 = "home",
                 Deck = deck1
@@ -136,8 +121,6 @@ namespace DBL.Migrations
             var word2 = new Word()
             {
                 Id = 2,
-                Language1 = "pl",
-                Language2 = "en",
                 Word1 = "pies",
                 Word2 = "dog",
                 Deck = deck1
@@ -147,8 +130,6 @@ namespace DBL.Migrations
             var word3 = new Word()
             {
                 Id = 3,
-                Language1 = "pl",
-                Language2 = "en",
                 Word1 = "kot",
                 Word2 = "cat",
                 Deck = deck2
@@ -158,8 +139,6 @@ namespace DBL.Migrations
             var word4 = new Word()
             {
                 Id = 4,
-                Language1 = "pl",
-                Language2 = "en",
                 Word1 = "mysz",
                 Word2 = "mouse",
                 Deck = deck2
@@ -169,8 +148,6 @@ namespace DBL.Migrations
             var word5 = new Word()
             {
                 Id = 5,
-                Language1 = "pl",
-                Language2 = "en",
                 Word1 = "kot",
                 Word2 = "cat",
                 Deck = deck2
@@ -180,8 +157,6 @@ namespace DBL.Migrations
             var word6 = new Word()
             {
                 Id = 6,
-                Language1 = "pl",
-                Language2 = "en",
                 Word1 = "lis",
                 Word2 = "fox",
                 Deck = deck2
@@ -191,8 +166,6 @@ namespace DBL.Migrations
             var word7 = new Word()
             {
                 Id = 7,
-                Language1 = "ciekawostka",
-                Language2 = "odp",
                 Word1 = "ile nóg ma pies?",
                 Word2 = "4!",
                 Deck = deck3
@@ -202,8 +175,6 @@ namespace DBL.Migrations
             var word8 = new Word()
             {
                 Id = 8,
-                Language1 = "ciekawostka",
-                Language2 = "odp",
                 Word1 = "po stawie p³ywa kaczka siê nazywa co to jest?",
                 Word2 = "kaczka",
                 Deck = deck3
@@ -213,8 +184,6 @@ namespace DBL.Migrations
             var word9 = new Word()
             {
                 Id = 9,
-                Language1 = "pl",
-                Language2 = "en",
                 Word1 = "add",
                 Word2 = "dodaj",
                 Deck = deck3
@@ -224,8 +193,6 @@ namespace DBL.Migrations
             var word10 = new Word()
             {
                 Id = 10,
-                Language1 = "pl",
-                Language2 = "en",
                 Word1 = "jab³ko",
                 Word2 = "apple",
                 Deck = deck3

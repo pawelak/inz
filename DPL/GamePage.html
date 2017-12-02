@@ -26,16 +26,15 @@
         <ul id="myUL">
 
         </ul>
-       
+
     </div>
     <div style="float: left; width: 65%; padding: 5% 1%">
         <div style="float: left; width: 60%;" class="column">
-            <span onclick="" class="button">Zmień kolejność</span>
-            <h2 id="word" style="padding: 1% 1% 1% 1%">gra- wybierz talię i akceptuj</h2>
-            <h2 id="Answer" style="padding: 1% 1% 1% 1%">test</h2>
+            <span onclick="changeOrder()" class="button">Zmień kolejność</span>
+            <h2 id="word" style="padding: 1% 1% 1% 1%">wybierz talię i akceptuj</h2>
+            <h2 id="Answer" style="padding: 1% 1% 1% 1%"></h2>
             <input type="text" id="answerIn" placeholder="odpowiedź">
-            <span onclick="rand()" class="button">Akceptuj</span>
-            <span onclick="" class="button">nie wiem</span>
+            <span onclick="check()" class="button">Akceptuj</span>
         </div>
         <div style="float: left; width: 40%; padding: 0 0 0 3%">
             <div style="float: left; width: 110%" class="column">
@@ -81,14 +80,15 @@
 //global values
     var ListOfDecks;
     var email;
-    var triggeredList=[];
+    var triggeredList = [];
     var currentWord;
     var currentId = 0;
     var currentSite = 1;
-
+    var mode = 0;
 
 
     sessionStorage.removeItem('deckId');
+
 // on load 
     window.onload = function() {
         email = sessionStorage.getItem("email");
@@ -116,7 +116,7 @@
                     alert(response.responseText);
                 }
             });
-            
+
 
         } else {
             // window.location.replace("login.html"); //odkomentować w wersji ostatecznej!!!!!!
@@ -125,11 +125,10 @@
     }
 
 
-
 // Add a "checked" symbol when clicking on a list item
     var list = document.querySelector('ul');
     list.addEventListener('click',
-        function (ev) {
+        function(ev) {
             if (ev.target.tagName === 'LI') {
                 ev.target.classList.toggle('checked');
                 var h = parseInt(ev.target.id.substring(3));
@@ -153,18 +152,14 @@
 //        }
 //    }
 
-  
+
 // Create a new list item when clicking on the "Add" button!!!!!
     function newElement() {
-        //var li = document.createElement("li");
         var inputValue = document.getElementById("myInput").value;
-        //var t = document.createTextNode(inputValue);
-        //li.appendChild(t);
         if (inputValue === '') {
             alert("Musisz coś wpisać!");
         } else {
-  
-            //document.getElementById("myUL").appendChild(li);
+
             $.ajax({
                 url: 'http://localhost:60482/api/Decks?email=' + email,
                 type: "Put",
@@ -173,44 +168,46 @@
                     "Name": inputValue,
                     "Public": false
                 },
-                success: function (response) {  
+                success: function(response) {
                     if (response) {
-                        alert(response);
+                        
+                        var elem = document.createElement("li");
+                        elem.id = "li_" + response;
+                        elem.innerHTML = inputValue;
+                        document.getElementById("myUL").appendChild(elem);
 
-                        if (response > 0)
-                        {
-                            var elem = document.createElement("li");
-                            elem.id = "li_" + response;
-                            elem.innerHTML = inputValue;
-                            document.getElementById("myUL").appendChild(elem);
+                        var span = document.createElement("SPAN");
+                        var txt = document.createTextNode("edit");
+                        span.className = "edit";
+                        span.appendChild(txt);
+                        elem.appendChild(span);
+                        span.id = response.Id;
+                        alert(span.id);
+                        span.onclick = function () {
+                            alert("w");
+                            sessionStorage.setItem("deckId", this.id);
+                            window.location.href="EditPanel.html";
+                        };
 
-                            var span = document.createElement("SPAN");
-                            var txt = document.createTextNode("edit");
-                            span.className = "edit";
-                            span.appendChild(txt);
-                            elem.appendChild(span);
+                        document.getElementById("myUL").appendChild(elem);
 
-                            document.getElementById("myUL").appendChild(elem);
-
-                        }
+                        document.getElementById("myInput").value = "";
                     } else {
                         alert("talia nie może być utworzona");
                     }
                 },
-                failure: function (response) {
-                    alert(response);
+                failure: function(response) {
+                    alert("wystąpił błąd");
                     alert(response.responseText);
                 },
-                error: function (response) {
-                    alert(response);
+                error: function(response) {
+                    alert("wystąpił błąd");
                     alert(response.responseText);
                 }
-
             });
+            document.getElementById("myInput").value = "";
         }
-        
     }
-
 
     function printDeck() {
         var i;
@@ -222,91 +219,101 @@
             var span = document.createElement("SPAN");
             var txt = document.createTextNode("edit");
             span.className = "edit";
-            span.appendChild(txt); 
+            span.appendChild(txt);
             elem.appendChild(span);
             span.id = ListOfDecks[i].Id;
-            span.onclick = savaAndMove();
-
-        }
-
-    }
-
-    function savaAndMove() {
-        var close = document.getElementsByClassName("edit");
-        var i;
-        for (i = 0; i < close.length; i++) {
-            close[i].onclick = function() {
+            span.onclick = function() {
                 sessionStorage.setItem("deckId", this.id);
-                window.location.replace("EditPanel.html");
-            }
+                window.location.href="EditPanel.html";
+            };
+
         }
+
     }
 
     function check() {
         var answer = document.getElementById("answerIn").value;
-        if (currentWord != null) {
-            if (answer !== "") {
-                var rightAns = (currentSite === 1 ? currentWord.Word2 : currentWord.Word1);
-                if (answer.toLowerCase() === rightAns.toLowerCase()) {
+        if (currentWord !== undefined && currentWord !== null) {
+            if (mode == 0) {
+                var rightAns = ((currentSite === 1) ? currentWord.Word2 : currentWord.Word1);
+
+                if (answer.toLowerCase() == rightAns.toLowerCase()) {
+                    alert("true");
                     setResult(1);
                     currentWord.YesCounter++;
-                    currentWord.KnowLevel ? currentWord.KnowLevel = 15 : currentWord.KnowLevel += 15;
                     currentWord.Started = true;
-
-                    $.ajax({
-                        url: 'http://localhost:60482/api/GameModule' + email,
-                        type: "Post",
-                        dataType: 'json',
-                        data: {
-                            "Name": inputValue,
-                            "Public": false
-                        },
-                        success: function (response) {  
-
-
-                        },
-                        failure: function (response) {
-                            alert(response);
-                            alert(response.responseText);
-                        },
-                        error: function (response) {
-                            alert(response);
-                            alert(response.responseText);
-                        }
-
-                    });
-
+                    currentWord.LastAnswer = 1;
+                } else {
+                    alert("flase");
+                    setResult(-1);
+                    currentWord.NoCounter++;
+                    currentWord.Started = true;
+                    currentWord.LastAnswer = -1;
+                    document.getElementById("answerIn").value = rightAns.substring(0, 10) + " " + rightAns.substring(12, 20);
                 }
+                alert("za sondowaniem");
+                $.ajax({
+                    url: 'http://localhost:60482/api/GameModule?email=' + email,
+                    type: "Post",
+                    dataType: 'json',
+                    data: {
+                        "Id": currentWord.Id,
+                        "Word1": currentWord.Word1,
+                        "Word2": currentWord.Word2,
+                        "YesCounter": currentWord.YesCounter,
+                        "NoCounter": currentWord.NoCounter,
+                        "LastAnswer": currentWord.LastAnswer
+                    },
+                    success: function(response) {
+                        alert("zwrotka"); //zwrotka się wypiepsza
+                    },
+                    failure: function (response) {
 
-            } else {
-                alert("odpowiedź pusta");
+                        alert(response);
+                        alert(response.responseText);
+                    },
+                    error: function(response) {
+                        alert(response);
+                        alert(response.responseText);
+                    }
+                });
+                alert("set1");
+                mode = 1;
+            } else if (mode == 1) {
+                mode = 0;
+                setResult(0);
+                document.getElementById("answerIn").value = "";
+                mode = 0;
+                rand();
             }
         } else {
-            rand(); 
+            document.getElementById("answerIn").value = "";
+            rand();
         }
-        
     }
 
     function rand() {
-        if (triggeredList.some(checkActive)) {
-            currentId = nextDeck(currentId);
+        currentId = nextDeck(currentId);
+        if (currentId != null ) {
             $.ajax({
                 url: `http://localhost:60482/api/GameModule?id=${currentId}&email=${email}`,
-                type: "GET",
+                type: "Get",
                 dataType: 'json',
-                success: function(response) {
+                success: function (response) {
                     if (response) {
+                    
                         currentWord = response;
-                        document.getElementById('word').innerHTML =
-                            (currentSite === 1 ? response.Word1 : response.Word2);
+                        document.getElementById('word').innerHTML = (currentSite === 1 ? response.Word1 : response.Word2);                  
                         document.getElementById('NoCo').innerHTML = response.NoCounter;
-                        document.getElementById('Yesco').innerHTML = response.YesCounter;
-                        document.getElementById('LastAns').innerHTML = response.LastAnswer;
-                        document.getElementById('LastAnsD').innerHTML = response.LastUsage;
-                        document.getElementById('Know').innerHTML = response.KnowLevel;
+                        document.getElementById('YesCo').innerHTML = response.YesCounter;
+                        document.getElementById('LastAns').innerHTML = (response.LastAnswer == 1) ? "poprawnie" : "błędnie";
+                        document.getElementById('LastAnsD').innerHTML = response.LastUsage.substring(0, 10) + " " + response.LastUsage.substring(11, 16);
+                        document.getElementById('Know').innerHTML = response.KnowLevel + "%";
                     } else {
-                        alert("talia pusta!!!");
-                    } 
+                        currentWord = null;
+                        document.getElementById("word").innerHTML = "wybierz talję ze słówkami";
+                        alert("talia pusta lub wszytkie słowa na dziś wykoodpowiedziane");
+                    }
                 },
                 failure: function(response) {
                     alert(response);
@@ -316,45 +323,50 @@
                     alert(response);
                     alert(response.responseText);
                 }
-
             });
         } else {
-            alert("wybierz listę");
+            alert("żadna talia nie zaznaczona");
         }
-       
+        
     }
 
     function setResult(ans) {
-        var line = document.getById("Answer");
+        var line = document.getElementById("Answer");
         switch (ans) {
             case -1:
-                line.innerHTML = "ŻLE";
-                line.style.color = "red";
-                break;
+            line.innerHTML = "ŻLE";
+            line.style.color = "red";
+            break;
             case 1:
-                line.innerHTML = "DOBRZE!!!";
-                line.style.color = "green";
-                break;
+            line.innerHTML = "DOBRZE!!!";
+            line.style.color = "green";
+            break;
             default:
-                line.innerHTML = "";
+            line.innerHTML = "";
         }
     }
 
-
-    function nextDeck(deckId) { 
-        while (true) {
-            if (triggeredList.length < deckId + 1) deckId = 0;
-            alert(deckId + " " + triggeredList[deckId]);
-            if (triggeredList[deckId] > 0) {
-                return triggeredList[deckId];
+    function nextDeck(listId) {
+        for (var i = 0; i < triggeredList.length; i++) {
+            alert("w for");
+            if (triggeredList.length < listId) listId = 0;
+            alert(listId + " " + triggeredList[listId]);
+            if (triggeredList[listId] > 0) {
+                return triggeredList[listId];
             }
-            deckId++;
+            listId++;
         }
-    } 
-
-    function checkActive(act) {
-        return act > 0;
+        return null;
     }
+
+    function changeOrder() {
+        if (currentSite == 1) {
+            currentSite = 0;
+        } else {
+            currentWord =1;
+        }
+    }
+
 </script>
 
 

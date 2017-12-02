@@ -12,6 +12,7 @@ namespace DBL.Models
     {
         [Key, ForeignKey("Word")]
         public int Id { get; set; }
+
         public int YesCounter { get; set; }
         public int NoCounter { get; set; }
         public DateTime LastUsage { get; set; }
@@ -21,6 +22,7 @@ namespace DBL.Models
 
         public virtual Word Word { get; set; }
 
+        //Stat must to by init always when word
         public Stat()
         {
             YesCounter = 0;
@@ -29,6 +31,7 @@ namespace DBL.Models
             NextUsage = DateTime.Now;
             KnowLevel = 0;
         }
+
         public Stat(Word word)
         {
             YesCounter = 0;
@@ -38,6 +41,5 @@ namespace DBL.Models
             KnowLevel = 0;
             Word = word;
         }
-
     }
 }

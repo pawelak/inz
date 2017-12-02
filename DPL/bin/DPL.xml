@@ -481,5 +481,52 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="M:DPL.Controllers.DecksController.Get(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="email"></param>
+            <returns>list of Decks</returns>
+        </member>
+        <member name="T:DPL.Controllers.WordController">
+            <summary>
+            controler responsible for all segment related with wordDto
+            </summary>
+        </member>
+        <member name="M:DPL.Controllers.WordController.Get(System.String,System.Int32)">
+            <summary>
+            Geting a list of Words in deck
+            </summary>
+            <param name="email"></param>
+            <param name="deckId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DPL.Controllers.WordController.Post(System.String,System.Int32,BLL.ModelsDTO.WordDto)">
+            <summary>
+            is editing word but you can change just word content
+            </summary>
+            <param name="email"></param>
+            <param name="deckId"></param>
+            <param name="wordDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DPL.Controllers.WordController.Put(System.String,System.Int32,BLL.ModelsDTO.WordDto)">
+            <summary>
+            is adding new element
+            </summary>
+            <param name="email"></param>
+            <param name="deckId"></param>
+            <param name="wordDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DPL.Controllers.WordController.Delete(System.String,System.Int32,System.Int32)">
+            <summary>
+            deleting alement
+            </summary>
+            <param name="email"></param>
+            <param name="deckId"></param>
+            <param name="wordId"></param>
+            <returns></returns>
+        </member>
     </members>
 </doc>

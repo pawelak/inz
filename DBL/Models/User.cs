@@ -11,16 +11,25 @@ namespace DBL.Models
 {
     public class User : IEntity
     {
-            [Key]
-            public int Id { get; set; }
-            public string Firstname { get; set; }
-            public string Name { get; set; }
-            public string Email { get; set; }
-            public string Password { get; set; }
+        [Key]
+        public int Id { get; set; }
 
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
 
-            public virtual ICollection<Deck> Decks { get; set; }
+        public virtual ICollection<Deck> Decks { get; set; }
 
+        public User()
+        {
+        }
 
+        public User(string name, string email, string password)
+        {
+            Name = name;
+            Email = email;
+            Password = password;
+            Decks = new List<Deck>();
+        }
     }
 }

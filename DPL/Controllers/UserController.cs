@@ -14,6 +14,8 @@ namespace DPL.Controllers
     public class UserController : ApiController
     {
         private readonly UserService _userService = new UserService();
+        private readonly AuthService _authService = new AuthService();
+
 
         public string Get()
         {
@@ -23,21 +25,30 @@ namespace DPL.Controllers
         // GET api/User?email=string&password=string
         public bool Get(string email,string password)
         {
-            return _userService.AcceptPassword(email, password);
+            return _authService.AcceptPassword(email, password);
         }
 
         public bool Get(string email)
         {
-            return _userService.UserExist(email);
+            return _authService.UserExist(email);
         }
 
         // POST api/User
-        public IHttpActionResult Post([FromBody] UserDto userDto)
-
-
+        public IHttpActionResult Put([FromBody] UserDto userDto)
         {
             var c = _userService.AddUser(userDto);
-            var response = Request.CreateResponse(HttpStatusCode.OK,c);
+            return Ok(c);
+        }
+
+        public IHttpActionResult Post(string email, string name)
+        {
+            var c = _userService.EditName(email, name);
+;            return Ok(c);
+        }
+
+        public IHttpActionResult Post(string email, string passwordO, string passwordN)
+        {
+            var c = _userService.EditPassword(email, passwordO, passwordN);
             return Ok(c);
         }
     }

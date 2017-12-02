@@ -11,42 +11,69 @@ namespace BLL.Services
 {
     public class UserService
     {
-        private UnitOfWork uow;
+        private readonly UnitOfWork _uow;
+        private readonly AuthService _authService;
 
         public UserService()
         {
-            uow = new UnitOfWork();
+            _authService = new AuthService();
+            _uow = new UnitOfWork();
         }
-
-        public bool UserExist(string email)
-        {
-            var h = uow.Repository<User>().FindBy(user => user.Email.Equals(email));
-            var h2 = h.ToList();
-            return h.Any();
-        }
-        public bool AcceptPassword(string email, string pass)
-        {
-            var user = uow.Repository<User>().FindBy(u => u.Email.Equals(email) && u.Password.Equals(pass));
-            var h = user.ToList();
-            return user.Any();
-         }
 
         public string AddUser(UserDto userDto)
         {
             try
             {
-                if (UserExist(userDto.Email))
+                if (_authService.UserExist(userDto.Email))
                 {
                     return "użytkownik znajduje się już w bazie";
                 }
-                uow.Repository<User>()
-                    .Insert(new User() {Email = userDto.Email, Name = userDto.Login, Password = userDto.Password});
+                _uow.Repository<User>()
+                    .Insert(new User(email: userDto.Email, password: userDto.Password, name: userDto.Name) );
                 return "konto utworzone";
             }
             catch (Exception e)
             {
                 return "błąd podczas tworzenia konta";
             }
+        }
+
+        public string EditName(string email, string name)
+        {
+            try
+            {
+                if (_authService.UserExist(email))
+                {
+                    var tmp = _uow.Repository<User>().FindBy(user => user.Email.Equals(email)).First();
+                    tmp.Name = name;
+                    _uow.Repository<UserDto>().Edit(new UserDto(tmp.Id, tmp.Name, tmp.Email, tmp.Password));
+                    return "Edytowano nazwę";
+                }
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+            return "błąd podczas edycji konta";
+        }
+
+        public string EditPassword(string email, string passwordO, string passwordN)
+        {
+            try
+            {
+                if (_authService.AcceptPassword(email,passwordO))
+                {
+                    var tmp = _uow.Repository<User>().FindBy(user => user.Email.Equals(email)).First();
+                    tmp.Password = passwordN;
+                    _uow.Repository<UserDto>().Edit(new UserDto(tmp.Id, tmp.Name, tmp.Email, tmp.Password));
+                    return "Edytowano hasło";
+                }
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+            return "błąd podczas edycji hasła";
         }
 
     }

@@ -10,40 +10,44 @@ namespace DBL.Repositories
 {
     
     public class UnitOfWork : IDisposable
-    {
-        private DataContext db { get; }
+    {//c++ abits with variables ;d 
+        private DataContext Db { get; }
+        public Dictionary<Type, object> Repos = new Dictionary<Type, object>();
+        private bool _disposed;
 
         public UnitOfWork()
         {
-            this.db = new DataContext();
+            this.Db = new DataContext();
         }
-
-        public Dictionary<Type, object> Repos = new Dictionary<Type, object>();
 
         public IRepository<T> Repository<T>() where T : class
         {
             if (Repos.Keys.Contains(typeof(T)))
                 return Repos[typeof(T)] as IRepository<T>;
-            IRepository<T> repo = new GenericRepository<T>(db);
+            IRepository<T> repo = new GenericRepository<T>(Db);
             Repos.Add(typeof(T), repo);
             return repo;
         }
 
 
         //do anlizy 
-        private bool disposed = false;
         protected virtual void Dispose(bool disposing)
         {
-            if (!this.disposed)
+            if (!_disposed)
             {
                 if (disposing)
-                    db.Dispose();
+                {
+                    //dispose managed resources todo 
+                }
             }
-            this.disposed = true;
+            //dispose unmanaged resources todo
+            _disposed = true;
         }
+
         public void Dispose()
         {
-            throw new NotImplementedException();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

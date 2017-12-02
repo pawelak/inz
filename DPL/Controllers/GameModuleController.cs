@@ -26,7 +26,7 @@ namespace DPL.Controllers
         }
 
         // POST: api/GameModule
-        public bool Post([FromBody]string email, WordDto wordDto)
+        public int Post(string email, [FromBody] WordDto wordDto)
         {
             return _gameService.WordResult(email, wordDto);
         }

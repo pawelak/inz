@@ -10,8 +10,6 @@ namespace BLL.ModelsDTO
         public int Id { get; set; }
         public string Word1 { get; set; }
         public string Word2 { get; set; }
-        public string Language1 { get; set; }
-        public string Language2 { get; set; }
         public int IdStat { get; set; }
         public int YesCounter { get; set; }
         public int NoCounter { get; set; }
@@ -20,5 +18,24 @@ namespace BLL.ModelsDTO
         public int LastAnswer { get; set; }
         public bool Started { get; set; }
         public DateTime NextUsage { get; set; }
+
+        public WordDto()
+        {
+        }
+
+        public WordDto(int id, string word1, string word2, int idStat, int yesCounter, int noCounter, DateTime lastUsage, int knowLevel, int lastAnswer, bool started, DateTime nextUsage)
+        {
+            Id = id;
+            Word1 = word1;
+            Word2 = word2;
+            IdStat = idStat;
+            YesCounter = yesCounter;
+            NoCounter = noCounter;
+            LastUsage = lastUsage;
+            KnowLevel = knowLevel;
+            LastAnswer = lastAnswer;
+            Started = started;
+            NextUsage = nextUsage;
+        }
     }
 }

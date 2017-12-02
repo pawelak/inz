@@ -13,8 +13,8 @@ namespace DBL.Interfaces
 {
     public class GenericRepository<T> : IRepository<T> where T : class
     {
-        private IDataContext _dbContext;
-        readonly IDbSet<T> _objectSet;
+        private readonly IDataContext _dbContext;
+        private readonly IDbSet<T> _objectSet;
 
         public GenericRepository(IDataContext dataContext)
         {
@@ -27,26 +27,10 @@ namespace DBL.Interfaces
             return _objectSet.AsEnumerable();
         }
 
-        public virtual async Task<ICollection<T>> GetAllAsync()
-        {
-            return await _objectSet.ToListAsync();
-        }
-
-        public virtual T GetById(int id)
-        {
-            return _objectSet.Find(id);
-        }
-
         public virtual T Insert(T obj)
         {
             _objectSet.Add(obj);
             this.Save();
-            return obj;
-        }
-
-        public virtual T InsertOrUpdate(T obj)
-        {
-            _objectSet.AddOrUpdate(obj);
             return obj;
         }
 
@@ -56,12 +40,6 @@ namespace DBL.Interfaces
             Save();
         }
 
-        public virtual void Attach(T obj)
-        {
-            _objectSet.Attach(obj);
-
-        }
-
         public virtual void Delete(int id)
         {
             var obj = FindById(id);
@@ -69,14 +47,14 @@ namespace DBL.Interfaces
             Save();
         }
 
-        public T FindById(object id)
+        public T FindById(int id)
         {
             return _objectSet.Find(id);
         }
 
         public IQueryable<T> FindBy(Expression<Func<T, bool>> predicate)
         {
-            IQueryable<T> query = _objectSet.Where(predicate);
+            var query = _objectSet.Where(predicate);
             return query;
         }
 

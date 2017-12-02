@@ -11,14 +11,10 @@ namespace DBL.Interfaces
     public interface IRepository<T> where T: class
     {
         IEnumerable<T> GetAll();    
-        Task<ICollection<T>> GetAllAsync();
-        T GetById(int id);
         T Insert(T obj);
-        void Attach(T obj);
         void Delete(int id);
         void Edit(T obj);
-        T InsertOrUpdate(T obj);
-        T FindById(object id);
+        T FindById(int id);
         IQueryable<T> FindBy(Expression<Func<T, bool>> predicate);
         void Save();
 

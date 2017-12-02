@@ -13,7 +13,9 @@
 <div style="width: 100%;">
     <!-- Main Div -->
     <div class="navbar">
+        <a href="GamePage.html" id="backPage">Fiszki</a>
         <a href="#" id="loginBox">Login</a>
+
     </div>
     <div style="float: left; width: 60%; padding: 5% 1%">
         <div class="column">
@@ -22,11 +24,11 @@
             <h4 style="margin: 5px">Opis Talii:</h4>
             <input type="text" id="myInputDes">
             <span onclick="setInfo()" class="button">Popraw</span>
+            <span onclick="deleteDeck()" class="button">Usuń</span>
         </div>
-        
+
         <div style="padding: 1% 1%"></div>
- 
-        
+
 
         <div id="myDIV" class="column">
             <ul id="myUL">
@@ -35,14 +37,13 @@
         </div>
 
 
-
     </div>
     <div style="float: left; width: 36%; padding: 5% 1%">
         <div id="myDIV2" class="column" style="padding: 2% 2%">
-            <input type="text" id="Word1" placeholder="Słowo1" >
+            <input type="text" id="Word1" placeholder="Słowo1">
             <input type="text" id="Word2" placeholder="Słowo2">
-            <span onclick="seti()" class="button">Popraw</span>
-            <span onclick="seti()" class="button">Dodaj</span>
+            <span onclick="remake()" class="button">Popraw</span>
+            <span onclick="sendWord()" class="button">Dodaj</span>
         </div>
 
     </div>
@@ -53,7 +54,6 @@
 </div>
 
 
-
 <script>
 //global variable
 
@@ -62,42 +62,35 @@
     var listOfWords;
     var deckInfo;
 
-    function seti() {
-        document.getElementById("myInputName").value = "dupa:";
-        document.getElementById("myInputDes").placeholder = "asda:";
-
-    }
 
 //onload
-    window.onload = function ()
-    {
+    window.onload = function() {
         email = sessionStorage.getItem("email");
         deckId = sessionStorage.getItem("deckId");
-        if (email)
-        {
+        if (email) {
             document.getElementById("loginBox").innerHTML = "Witaj " + email + "!";
-            
+
             getInfo();
             getList();
-      
+
         }
     }
 
     function getList() {
         $.ajax({
-            url: `http://localhost:60482/api/Decks?deckId=${deckId}&email=${email}`,
+            url: `http://localhost:60482/api/Word?deckId=${deckId}&email=${email}`,
             type: "GET",
             dataType: 'json',
-            success: function (response) {
+            success: function(response) {
                 listOfWords = response;
                 printDeck();
             },
             failure: function(response) {
-                alert(response);
+                alert("wystąpił błąd");
                 alert(response.responseText);
             },
             error: function(response) {
-                alert(response);
+                alert("wystąpił błąd");
                 alert(response.responseText);
             }
 
@@ -105,22 +98,23 @@
     }
 
     function getInfo() {
-        
+
         $.ajax({
             url: `http://localhost:60482/api/Decks?deckId=${deckId}`,
             type: "GET",
             dataType: 'json',
-            success: function (response) {
+            success: function(response) {
                 deckInfo = response;
                 document.getElementById("myInputName").placeholder = deckInfo.Name;
-                document.getElementById("myInputDes").placeholder = deckInfo.Description;
+                document.getElementById("myInputDes").placeholder =
+                    (deckInfo.Description == null) ? "" : deckInfo.Description;
             },
-            failure: function (response) {
-                alert(response);
+            failure: function(response) {
+                alert("wystąpił błąd");
                 alert(response.responseText);
             },
-            error: function (response) {
-                alert(response);
+            error: function(response) {
+                alert("wystąpił błąd");
                 alert(response.responseText);
             }
 
@@ -128,9 +122,13 @@
     }
 
     function setInfo() {
-        if (document.getElementById("myInputName").value !== "" && document.getElementById("myInputDes").value !== "") {
-            deckInfo.Name = document.getElementById("myInputName").value;
-            deckInfo.Description = document.getElementById("myInputDes").value;
+        if (document.getElementById("myInputName").value !== "" || document.getElementById("myInputDes").value !== "") {
+            deckInfo.Name = (document.getElementById("myInputName").value !== ""
+                ? document.getElementById("myInputName").value
+                : deckInfo.Name);
+            deckInfo.Description = (document.getElementById("myInputDes").value !== ""
+                ? document.getElementById("myInputDes").value
+                : deckInfo.Name);
             $.ajax({
                 url: `http://localhost:60482/api/Decks?email=${email}`,
                 type: "Post",
@@ -151,11 +149,11 @@
                     getInfo();
                 },
                 failure: function(response) {
-                    alert(response);
+                    alert("wystąpił błąd");
                     alert(response.responseText);
                 },
                 error: function(response) {
-                    alert(response);
+                    alert("wystąpił błąd");
                     alert(response.responseText);
                 }
 
@@ -164,50 +162,190 @@
             alert("Uzupełnij nazwę i opis");
     }
 
-    function printDeck()
-    {
+    function FindWwordId(word) {
+
+        return word.Id === '4';
+    }
+
+    function printDeck() {
         var i;
-        for (i = 0; i < listOfWords.length; i++)
-        {
+        for (i = 0; i < listOfWords.length; i++) {
             var elem = document.createElement("li");
             elem.id = listOfWords[i].Id;
             elem.innerHTML = listOfWords[i].Word1 + " - " + listOfWords[i].Word2;
+            elem.onclick = function() {
+                var helpElem;
+                for (var i = 0; i < listOfWords.length; i++) {
+                    if (listOfWords[i].Id == this.id) {
+                        helpElem = listOfWords[i];
+                        break;
+                    }
+                }
+                document.getElementById("Word1").value = helpElem.Word1;
+                document.getElementById("Word2").value = helpElem.Word2;
+                localStorage.setItem("wordId", helpElem.Id);
+            }
             document.getElementById("myUL").appendChild(elem);
             var span = document.createElement("SPAN");
             var txt = document.createTextNode("usuń");
             span.className = "edit";
             span.appendChild(txt);
             elem.appendChild(span);
+            span.id = listOfWords[i].Id;
+            span.onclick = function() {
+                var wordId = this.id;
+                var div = this.parentElement;
+                div.style.display = "none";
+                $.ajax({
+                    url: `http://localhost:60482/api/Word?email=${email}&deckId=${deckId}&wordId=${wordId}`,
+                    type: "Delete",
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response !== 1) {
+                            div.style.display = "";
+                        }
+                    },
+                    failure: function(response) {
+                        alert("wystąpił błąd");
+                        alert(response.responseText);
+                    },
+                    error: function(response) {
+                        alert("wystąpił błąd");
+                        alert(response.responseText);
+                    }
+                });
+            };
         }
     }
 
-    function sendWord() 
-    {
-
+    function sendWord() {
         if (document.getElementById("Word1").value !== "" && document.getElementById("Word2").value !== "") {
             $.ajax({
-                url: `http://localhost:60482/api/Decks?deckId=${deckId}`,
+                url: `http://localhost:60482/api/Word?email=${email}&deckId=${deckId}`,
                 type: "Put",
                 dataType: 'json',
                 data: {
                     "Word1": document.getElementById("Word1").value,
                     "Word2": document.getElementById("Word2").value
-
                 },
                 success: function(response) {
 
+                    document.getElementById("Word1").value = "";
+                    document.getElementById("Word2").value = "";
+
+                    //stąd
+                    var elem = document.createElement("li");
+                    elem.id = response.Id;
+                    elem.innerHTML = response.Word1 + " - " + response.Word2;
+                    elem.onclick = function() {
+                        var helpElem;
+                        for (var i = 0; i < listOfWords.length; i++) {
+                            if (listOfWords[i].Id == this.id) {
+                                helpElem = listOfWords[i];
+                                break;
+                            }
+                        }
+                        document.getElementById("Word1").value = helpElem.Word1;
+                        document.getElementById("Word2").value = helpElem.Word2;
+                        alert("ustawiono " + helpElem.Id);
+                        localStorage.setItem("wordId", helpElem.Id);
+                    }
+                    document.getElementById("myUL").appendChild(elem);
+                    var span = document.createElement("SPAN");
+                    var txt = document.createTextNode("usuń");
+                    span.className = "edit";
+                    span.appendChild(txt);
+                    elem.appendChild(span);
+                    span.id = response.Id;
+                    span.onclick = function() {
+                        var wordId = this.id;
+                        var div = this.parentElement;
+                        div.style.display = "none";
+                        $.ajax({
+                            url: `http://localhost:60482/api/Word?email=${email}&deckId=${deckId}&wordId=${wordId}`,
+                            type: "Delete",
+                            dataType: 'json',
+                            success: function(response) {
+                                if (response !== 1) {
+                                    div.style.display = "";
+                                }
+                            },
+                            failure: function(response) {
+                                alert("wystąpił błąd");
+                                alert(response.responseText);
+                            },
+                            error: function(response) {
+                                alert("wystąpił błąd");
+                                alert(response.responseText);
+                            }
+                        });
+                    };
+
                 },
                 failure: function(response) {
-                    alert(response);
+                    alert("wystąpił błąd");
                     alert(response.responseText);
                 },
                 error: function(response) {
-                    alert(response);
+                    alert("wystąpił błąd");
                     alert(response.responseText);
                 }
 
             });
+        } else {
+            alert("podaj wartości");
         }
+    }
+
+    function remake() {
+        var wordId = localStorage.getItem("wordId");
+        $.ajax({
+            url: `http://localhost:60482/api/Word?email=${email}&deckId=${deckId}`,
+            type: "Post",
+            dataType: 'json',
+            data: {
+                "id": wordId,
+                "Word1": document.getElementById("Word1").value,
+                "Word2": document.getElementById("Word2").value
+            },
+            success: function(response) {
+                location.reload();
+            },
+            failure: function(response) {
+                alert("wystąpił błąd: " + response.responseText);
+            },
+            error: function(response) {
+                alert("wystąpił błąd: " + response.responseText);
+            }
+
+        });
+        document.getElementById("Word1").value = "";
+        document.getElementById("Word2").value = "";
+    }
+
+    function deleteDeck() {
+        var result = confirm("Jesteś pewien ze chcesz usunąć talię?");
+        if (result) {
+            $.ajax({
+                url: `http://localhost:60482/api/Decks?email=${email}&deckId=${deckId}`,
+                type: "Delete",
+                dataType: 'json',
+                success: function (response) {
+                    alert("usunięto");
+                    window.location.replace("GamePage.html");
+                },
+                failure: function(response) {
+                    alert("wystąpił błąd");
+                    alert(response.responseText);
+                },
+                error: function(response) {
+                    alert("wystąpił błąd");
+                    alert(response.responseText);
+                }
+            });
+        }
+
+
     }
 
 

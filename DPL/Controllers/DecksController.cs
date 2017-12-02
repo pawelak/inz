@@ -6,45 +6,42 @@ using System.Net.Http;
 using System.Web.Http;
 using BLL.ModelsDTO;
 using BLL.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DPL.Controllers
 {
     public class DecksController : ApiController
     {
-        DecksService _decksService = new DecksService();
+        readonly DecksService _decksService = new DecksService();
 
-        // GET: api/Decks
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
 
         // GET: api/Decks/5
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns>list of Decks</returns>
         public List<DeckDto> Get(string email)
         {
             var result = _decksService.GetDecks(email);
             return result;
         }
 
+        
         public DeckDto Get(int deckId)
         {
             return _decksService.GetInfo(deckId);
         }
 
-        public List<WordDto> Get(string email, int deckId)
-        {
-            return _decksService.GetListOfWords(email, deckId);
-        }
-
 
         // POST: api/Decks
-        public int Post([FromBody]DeckDto deckDto, string email)
+        public int Post([System.Web.Http.FromBody]DeckDto deckDto, string email)
         {
             return _decksService.UpdateDeck(email, deckDto);
         }
 
         // PUT: api/Decks/5
-        public int Put([FromBody]DeckDto deckDto, string email)
+        public DeckDto Put([System.Web.Http.FromBody]DeckDto deckDto, string email)
         {
             return _decksService.AddDeck(deckDto, email);
         }
